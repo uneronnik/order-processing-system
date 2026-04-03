@@ -1,4 +1,4 @@
-﻿package com.example.order.entity;
+package com.example.order.entity;
 
 public enum OrderStatus {
     PENDING,     // создан, ждёт оплаты
