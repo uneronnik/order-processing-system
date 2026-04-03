@@ -1,5 +1,6 @@
 package com.example.order.service;
 
+import com.example.common.event.OrderCreatedEvent;
 import com.example.order.dto.CreateOrderRequest;
 import com.example.order.dto.OrderResponse;
 import com.example.order.entity.Order;
@@ -16,9 +17,11 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderKafkaProducer orderKafkaProducer;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, OrderKafkaProducer orderKafkaProducer) {
         this.orderRepository = orderRepository;
+        this.orderKafkaProducer = orderKafkaProducer;
     }
 
     @Transactional
@@ -30,6 +33,15 @@ public class OrderService {
         order.setStatus(OrderStatus.PENDING);
 
         Order saved = orderRepository.save(order);
+
+        orderKafkaProducer.sendOrderCreated(new OrderCreatedEvent(
+                saved.getId(),
+                saved.getProductId(),
+                saved.getQuantity(),
+                saved.getAmount(),
+                saved.getCreatedAt()
+        ));
+
         return OrderResponse.from(saved);
     }
 
