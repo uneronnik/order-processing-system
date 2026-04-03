@@ -48,6 +48,7 @@ public class Order {
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
     public void setAmount(BigDecimal amount) { this.amount = amount; }
     public void setStatus(OrderStatus status) { this.status = status; }
+    public void setId(UUID uuid) {this.id = uuid;}
 
     @PrePersist
     protected void onCreate() {
@@ -59,5 +60,6 @@ public class Order {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
 
 }
