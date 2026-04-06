@@ -1,4 +1,4 @@
-﻿package com.example.common.event;
+package com.example.common.event;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

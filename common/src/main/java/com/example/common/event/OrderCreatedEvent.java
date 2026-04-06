@@ -1,4 +1,4 @@
-﻿package com.example.common.event;
+package com.example.common.event;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
