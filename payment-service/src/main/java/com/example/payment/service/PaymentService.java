@@ -1,18 +1,16 @@
-package com.example.service;
+package com.example.payment.service;
 
 import com.example.common.event.OrderCreatedEvent;
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
-import com.example.entity.Payment;
-import com.example.entity.PaymentStatus;
-import com.example.repository.PaymentRepository;
+import com.example.payment.entity.Payment;
+import com.example.payment.entity.PaymentStatus;
+import com.example.payment.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import com.example.service.PaymentKafkaProducer;
 
-import javax.print.attribute.standard.JobState;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

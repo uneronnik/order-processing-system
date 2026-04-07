@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.payment.entity;
 
 public enum PaymentStatus {
     COMPLETED,

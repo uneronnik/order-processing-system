@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.payment.service;
 
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
