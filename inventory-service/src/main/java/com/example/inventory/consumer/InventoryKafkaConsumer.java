@@ -29,18 +29,25 @@ public class InventoryKafkaConsumer {
     }
 
     @KafkaListener(topics = "order-events", groupId = "inventory-service")
-    public void handleOrderCreated(OrderCreatedEvent event) {
-        log.info("Received OrderCreatedEvent: orderId={}", event.orderId());
+    public void handleOrderCreated(String message) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+            OrderCreatedEvent event = objectMapper.readValue(message, OrderCreatedEvent.class);
+            log.info("Received OrderCreatedEvent: orderId={}", event.orderId());
             inventoryService.reserveItem(event);
-        } catch (ProductNotFoundException e) {
-            kafkaProducer.sendReservationFailed(new InventoryReservationFailedEvent(
-                    event.orderId(), event.productId(), "Product not found"
-            ));
-        } catch (InsufficientStockException e) {
-            kafkaProducer.sendReservationFailed(new InventoryReservationFailedEvent(
-                    event.orderId(), event.productId(), "Insufficient stock"
-            ));
+        } catch (ProductNotFoundException | InsufficientStockException e) {
+            try {
+                OrderCreatedEvent event = new ObjectMapper().registerModule(new JavaTimeModule())
+                        .readValue(message, OrderCreatedEvent.class);
+                log.warn("Reservation failed for order {}: {}", event.orderId(), e.getMessage());
+                kafkaProducer.sendReservationFailed(new InventoryReservationFailedEvent(
+                        event.orderId(), event.productId(), e.getMessage()
+                ));
+            } catch (Exception ex) {
+                log.error("Failed to parse event for error handling: {}", ex.getMessage());
+            }
+        } catch (Exception e) {
+            log.error("Failed to process order event: {}", e.getMessage());
         }
     }
 
