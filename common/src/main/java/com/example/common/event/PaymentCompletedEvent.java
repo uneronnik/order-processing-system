@@ -7,6 +7,8 @@ import java.util.UUID;
 public record PaymentCompletedEvent(
         UUID paymentId,
         UUID orderId,
+        String productId,
+        Integer quantity,
         BigDecimal amount,
         LocalDateTime processedAt
 ) {}
