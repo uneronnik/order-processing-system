@@ -45,12 +45,21 @@ public class PaymentService {
 
         if (success) {
             kafkaProducer.sendPaymentCompleted(new PaymentCompletedEvent(
-                    payment.getId(), event.orderId(), event.amount(), LocalDateTime.now()
+                    payment.getId(),
+                    event.orderId(),
+                    event.productId(),
+                    event.quantity(),
+                    event.amount(),
+                    LocalDateTime.now()
             ));
             log.info("Payment completed for orderId={}", event.orderId());
         } else {
             kafkaProducer.sendPaymentFailed(new PaymentFailedEvent(
-                    event.orderId(), "Insufficient funds", LocalDateTime.now()
+                    event.orderId(),
+                    "Insufficient funds",
+                    event.productId(),
+                    event.quantity(),
+                    LocalDateTime.now()
             ));
             log.warn("Payment failed for orderId={}", event.orderId());
         }
