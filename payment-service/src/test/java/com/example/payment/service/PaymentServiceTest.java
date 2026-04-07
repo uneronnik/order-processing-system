@@ -1,5 +1,6 @@
 package com.example.payment.service;
 
+import com.example.common.event.InventoryReservedEvent;
 import com.example.common.event.OrderCreatedEvent;
 import com.example.payment.producer.PaymentKafkaProducer;
 import com.example.payment.repository.PaymentRepository;
@@ -27,7 +28,7 @@ class PaymentServiceTest {
 
     @Test
     void processPayment_shouldCompleteSuccessfully() {
-        OrderCreatedEvent event = new OrderCreatedEvent(
+        InventoryReservedEvent event = new InventoryReservedEvent(
                 UUID.randomUUID(), "PHONE-001", 1, new BigDecimal("50000"), LocalDateTime.now());
         when(paymentRepository.existsByOrderId(event.orderId())).thenReturn(false);
         when(paymentRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -40,7 +41,7 @@ class PaymentServiceTest {
 
     @Test
     void processPayment_whenAlreadyProcessed_shouldSkip() {
-        OrderCreatedEvent event = new OrderCreatedEvent(
+        InventoryReservedEvent event = new InventoryReservedEvent(
                 UUID.randomUUID(), "PHONE-001", 1, new BigDecimal("50000"), LocalDateTime.now());
         when(paymentRepository.existsByOrderId(event.orderId())).thenReturn(true);
 
@@ -52,7 +53,7 @@ class PaymentServiceTest {
 
     @Test
     void processPayment_withHighAmount_shouldFail() {
-        OrderCreatedEvent event = new OrderCreatedEvent(
+        InventoryReservedEvent event = new InventoryReservedEvent(
                 UUID.randomUUID(), "CAR-001", 1, new BigDecimal("150000"), LocalDateTime.now());
         when(paymentRepository.existsByOrderId(event.orderId())).thenReturn(false);
         when(paymentRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));

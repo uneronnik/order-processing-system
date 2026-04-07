@@ -1,6 +1,6 @@
 package com.example.payment.service;
 
-import com.example.common.event.OrderCreatedEvent;
+import com.example.common.event.InventoryReservedEvent;
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
 import com.example.payment.entity.Payment;
@@ -29,7 +29,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public void processPayment(OrderCreatedEvent event) {
+    public void processPayment(InventoryReservedEvent event) {
         if (paymentRepository.existsByOrderId(event.orderId())) {
             log.warn("Payment already processed for orderId={}, skipping", event.orderId());
             return;

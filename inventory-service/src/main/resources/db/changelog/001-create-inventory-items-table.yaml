@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: inventory-items
             columns:
               - column:
-                  name: id
+                  name: orderId
                   type: uuid
                   defaultValueComputed: gen_random_uuid()
                   constraints:

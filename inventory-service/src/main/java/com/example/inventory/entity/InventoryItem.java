@@ -61,13 +61,6 @@ public class InventoryItem {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public boolean Reserve(int quantity) {
-        if(getReservedQuantity() + quantity <= getTotalQuantity()) {
-            setReservedQuantity(getReservedQuantity() + quantity);
-            return true;
-        }
-        return false;
-    }
 
     public void ConfirmReservation(int quantity) {
         setTotalQuantity(getTotalQuantity() + quantity);

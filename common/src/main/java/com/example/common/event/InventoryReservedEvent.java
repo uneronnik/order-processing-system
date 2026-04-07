@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record InventoryReservedEvent(
-        UUID id,
+        UUID orderId,
         String productId,
         Integer quantity,
         BigDecimal amount,

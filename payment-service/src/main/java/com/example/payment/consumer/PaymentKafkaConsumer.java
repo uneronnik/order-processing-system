@@ -1,6 +1,6 @@
 package com.example.payment.consumer;
 
-import com.example.common.event.OrderCreatedEvent;
+import com.example.common.event.InventoryReservedEvent;
 import com.example.payment.service.PaymentService;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,9 +19,9 @@ public class PaymentKafkaConsumer {
         this.paymentService = paymentService;
     }
 
-    @KafkaListener(topics = "order-events", groupId = "payment-service")
-    public void handleOrderCreated(OrderCreatedEvent event) {
-        log.info("Received OrderCreatedEvent: orderId={}", event.orderId());
+    @KafkaListener(topics = "inventory-events", groupId = "payment-service")
+    public void handleInventoryReserved(InventoryReservedEvent event) {
+        log.info("Received InventoryReservedEvent: orderId={}", event.orderId());
         paymentService.processPayment(event);
     }
 }
