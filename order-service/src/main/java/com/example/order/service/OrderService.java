@@ -60,4 +60,12 @@ public class OrderService {
                 .map(OrderResponse::from)
                 .toList();
     }
+
+    @Transactional
+    public void updateStatus(UUID orderId, OrderStatus status, String reason) {
+        orderRepository.findById(orderId).ifPresent(order -> {
+            order.setStatus(status);
+            orderRepository.save(order);
+        });
+    }
 }

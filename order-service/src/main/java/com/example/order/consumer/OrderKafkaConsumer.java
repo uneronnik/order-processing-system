@@ -1,10 +1,12 @@
 package com.example.order.consumer;
 
+import com.example.common.event.InventoryReservationFailedEvent;
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
 import com.example.order.entity.Order;
 import com.example.order.entity.OrderStatus;
 import com.example.order.repository.OrderRepository;
+import com.example.order.service.OrderService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,12 +23,12 @@ import java.util.UUID;
 @Service
 public class OrderKafkaConsumer {
 
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());;
     private static final Logger log = LoggerFactory.getLogger(OrderKafkaConsumer.class);
 
-    public OrderKafkaConsumer(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderKafkaConsumer(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @KafkaListener(topics = "payment-events", groupId = "order-service")
@@ -36,33 +38,28 @@ public class OrderKafkaConsumer {
 
             if (json.has("paymentId")) {
                 PaymentCompletedEvent event = objectMapper.treeToValue(json, PaymentCompletedEvent.class);
-                handlePaymentCompleted(event);
+                orderService.updateStatus(event.orderId(), OrderStatus.CONFIRMED, "Payment completed");
             } else if (json.has("reason")) {
                 PaymentFailedEvent event = objectMapper.treeToValue(json, PaymentFailedEvent.class);
-                handlePaymentFailed(event);
-            } else {
-                log.warn("Unknown event type in payment-events: {}", message);
+                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
             }
         } catch (Exception e) {
             log.error("Failed to process payment event: {}", e.getMessage());
         }
     }
 
-    @Transactional
-    public void handlePaymentCompleted(PaymentCompletedEvent event) {
-        orderRepository.findById(event.orderId()).ifPresent(order -> {
-            order.setStatus(OrderStatus.CONFIRMED);
-            orderRepository.save(order);
-            log.info("Order {} confirmed after payment", event.orderId());
-        });
-    }
+    @KafkaListener(topics = "inventory-events", groupId = "order-service")
+    public void handleInventoryResult(String message) {
+        try {
+            JsonNode json = objectMapper.readTree(message);
 
-    @Transactional
-    public void handlePaymentFailed(PaymentFailedEvent event) {
-        orderRepository.findById(event.orderId()).ifPresent(order -> {
-            order.setStatus(OrderStatus.CANCELLED);
-            orderRepository.save(order);
-            log.warn("Order {} cancelled: {}", event.orderId(), event.reason());
-        });
+            if (json.has("reason")) {
+                InventoryReservationFailedEvent event = objectMapper.treeToValue(
+                        json, InventoryReservationFailedEvent.class);
+                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
+            }
+        } catch (Exception e) {
+            log.error("Failed to process inventory event: {}", e.getMessage());
+        }
     }
 }

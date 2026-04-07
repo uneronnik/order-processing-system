@@ -17,6 +17,6 @@ public class InventoryKafkaProducer {
         kafkaTemplate.send(TOPIC, event.orderId().toString(), event);
     }
     public void sendReservationFailed(InventoryReservationFailedEvent event) {
-        kafkaTemplate.send(TOPIC, event.id().toString(), event);
+        kafkaTemplate.send(TOPIC, event.orderId().toString(), event);
     }
 }
