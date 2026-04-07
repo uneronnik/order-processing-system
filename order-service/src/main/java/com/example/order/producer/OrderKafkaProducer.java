@@ -1,4 +1,4 @@
-package com.example.order.service;
+package com.example.order.producer;
 
 import com.example.common.event.OrderCreatedEvent;
 import org.springframework.kafka.core.KafkaTemplate;

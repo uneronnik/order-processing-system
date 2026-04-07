@@ -6,6 +6,7 @@ import com.example.order.dto.OrderResponse;
 import com.example.order.entity.Order;
 import com.example.order.entity.OrderStatus;
 import com.example.order.exception.OrderNotFoundException;
+import com.example.order.producer.OrderKafkaProducer;
 import com.example.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
