@@ -1,4 +1,4 @@
-﻿package com.example.notification.router;
+package com.example.notification.router;
 
 import com.example.notification.sender.NotificationSender;
 import org.slf4j.Logger;

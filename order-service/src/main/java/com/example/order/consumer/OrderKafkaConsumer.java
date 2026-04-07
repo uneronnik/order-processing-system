@@ -1,4 +1,4 @@
-﻿package com.example.order.consumer;
+package com.example.order.consumer;
 
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
@@ -7,6 +7,7 @@ import com.example.order.entity.OrderStatus;
 import com.example.order.repository.OrderRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,12 +22,11 @@ import java.util.UUID;
 public class OrderKafkaConsumer {
 
     private final OrderRepository orderRepository;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());;
     private static final Logger log = LoggerFactory.getLogger(OrderKafkaConsumer.class);
 
-    public OrderKafkaConsumer(OrderRepository orderRepository, ObjectMapper objectMapper) {
+    public OrderKafkaConsumer(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.objectMapper = objectMapper;
     }
 
     @KafkaListener(topics = "payment-events", groupId = "order-service")

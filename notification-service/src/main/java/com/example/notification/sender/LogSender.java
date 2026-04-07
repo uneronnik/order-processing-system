@@ -1,4 +1,4 @@
-﻿package com.example.notification.sender;
+package com.example.notification.sender;
 
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;

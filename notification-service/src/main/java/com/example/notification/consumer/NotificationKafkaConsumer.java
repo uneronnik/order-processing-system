@@ -1,4 +1,4 @@
-﻿package com.example.notification.consumer;
+package com.example.notification.consumer;
 
 import com.example.common.event.PaymentCompletedEvent;
 import com.example.notification.router.NotificationRouter;

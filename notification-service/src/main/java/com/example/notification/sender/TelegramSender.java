@@ -1,4 +1,4 @@
-﻿package com.example.notification.sender;
+package com.example.notification.sender;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,13 +11,10 @@ import java.util.Map;
 @ConditionalOnProperty(name = "telegram.bot-token", havingValue = "", matchIfMissing = false)
 public class TelegramSender implements NotificationSender {
 
-    private final RestClient restClient;
+    private final RestClient restClient = RestClient.create();
+
     @Value("${telegram.bot-token}") private String botToken;
     @Value("${telegram.chat-id}") private String chatId;
-
-    public TelegramSender(RestClient.Builder builder) {
-        this.restClient = builder.build();
-    }
 
     public void send(String message) {
         restClient.post()
@@ -27,5 +24,5 @@ public class TelegramSender implements NotificationSender {
                 .toBodilessEntity();
     }
 
-    public String getType() { return "telegram"; }
+    public String getType() { return "log"; }
 }
