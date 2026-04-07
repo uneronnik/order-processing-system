@@ -37,7 +37,7 @@ public class InventoryItem {
         updatedAt = LocalDateTime.now();
     }
 
-    public UUID getId(UUID id) {return id;}
+    public UUID getId() {return id;}
 
     public String getProductId() {return productId;}
 
@@ -61,10 +61,12 @@ public class InventoryItem {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public void Reserve(int quantity) {
+    public boolean Reserve(int quantity) {
         if(getReservedQuantity() + quantity <= getTotalQuantity()) {
             setReservedQuantity(getReservedQuantity() + quantity);
+            return true;
         }
+        return false;
     }
 
     public void ConfirmReservation(int quantity) {
