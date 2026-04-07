@@ -1,6 +1,7 @@
-package com.example.payment.service;
+package com.example.payment.consumer;
 
 import com.example.common.event.OrderCreatedEvent;
+import com.example.payment.service.PaymentService;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,7 @@
 package com.example.payment.service;
 
 import com.example.common.event.OrderCreatedEvent;
+import com.example.payment.producer.PaymentKafkaProducer;
 import com.example.payment.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

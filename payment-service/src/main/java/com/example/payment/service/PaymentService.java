@@ -5,6 +5,7 @@ import com.example.common.event.PaymentCompletedEvent;
 import com.example.common.event.PaymentFailedEvent;
 import com.example.payment.entity.Payment;
 import com.example.payment.entity.PaymentStatus;
+import com.example.payment.producer.PaymentKafkaProducer;
 import com.example.payment.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
