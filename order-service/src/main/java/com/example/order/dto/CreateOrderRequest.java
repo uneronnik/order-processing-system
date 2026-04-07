@@ -12,8 +12,6 @@ public record CreateOrderRequest(
         String productId,
 
         @NotNull @Min(1)
-        Integer quantity,
+        Integer quantity
 
-        @NotNull @DecimalMin("0.01")
-        BigDecimal amount
 ) {}

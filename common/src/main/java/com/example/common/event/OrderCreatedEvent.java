@@ -8,6 +8,5 @@ public record OrderCreatedEvent(
         UUID orderId,
         String productId,
         Integer quantity,
-        BigDecimal amount,
         LocalDateTime createdAt
 ) {}

@@ -20,7 +20,7 @@ public class Order {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

@@ -11,6 +11,7 @@ import com.example.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +31,6 @@ public class OrderService {
         Order order = new Order();
         order.setProductId(request.productId());
         order.setQuantity(request.quantity());
-        order.setAmount(request.amount());
         order.setStatus(OrderStatus.PENDING);
 
         Order saved = orderRepository.save(order);
@@ -39,7 +39,6 @@ public class OrderService {
                 saved.getId(),
                 saved.getProductId(),
                 saved.getQuantity(),
-                saved.getAmount(),
                 saved.getCreatedAt()
         ));
 
@@ -62,9 +61,12 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateStatus(UUID orderId, OrderStatus status, String reason) {
+    public void updateStatus(UUID orderId, OrderStatus status, String reason, BigDecimal amount) {
         orderRepository.findById(orderId).ifPresent(order -> {
             order.setStatus(status);
+            if (amount != null) {
+                order.setAmount(amount);
+            }
             orderRepository.save(order);
         });
     }

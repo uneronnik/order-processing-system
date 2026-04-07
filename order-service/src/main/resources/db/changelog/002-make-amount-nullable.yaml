@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-make-amount-nullable
+      author: fomenko
+      changes:
+        - dropNotNullConstraint:
+            tableName: orders
+            columnName: amount
+            columnDataType: decimal(12,2)

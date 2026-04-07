@@ -38,10 +38,10 @@ public class OrderKafkaConsumer {
 
             if (json.has("paymentId")) {
                 PaymentCompletedEvent event = objectMapper.treeToValue(json, PaymentCompletedEvent.class);
-                orderService.updateStatus(event.orderId(), OrderStatus.CONFIRMED, "Payment completed");
+                orderService.updateStatus(event.orderId(), OrderStatus.CONFIRMED, "Payment completed", event.amount());
             } else if (json.has("reason")) {
                 PaymentFailedEvent event = objectMapper.treeToValue(json, PaymentFailedEvent.class);
-                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
+                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason(), null);
             }
         } catch (Exception e) {
             log.error("Failed to process payment event: {}", e.getMessage());
@@ -56,7 +56,7 @@ public class OrderKafkaConsumer {
             if (json.has("reason")) {
                 InventoryReservationFailedEvent event = objectMapper.treeToValue(
                         json, InventoryReservationFailedEvent.class);
-                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
+                orderService.updateStatus(event.orderId(), OrderStatus.CANCELLED, event.reason(), null);
             }
         } catch (Exception e) {
             log.error("Failed to process inventory event: {}", e.getMessage());
