@@ -38,4 +38,9 @@ public class OrderController {
             @RequestParam(required = false) OrderStatus status) {
         return ResponseEntity.ok(orderService.getMyOrders(status));
     }
+    @GetMapping("/admin/all")
+    public ResponseEntity<List<OrderResponse>> getAllOrders(
+            @RequestParam(required = false) OrderStatus status) {
+        return ResponseEntity.ok(orderService.getAllOrders(status));
+    }
 }

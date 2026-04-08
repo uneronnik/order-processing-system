@@ -59,14 +59,6 @@ public class OrderService {
         return OrderResponse.from(order);
     }
 
-    @Transactional(readOnly = true)
-    public List<OrderResponse> getOrdersByStatus(OrderStatus status) {
-        return orderRepository.findByStatus(status)
-                .stream()
-                .map(OrderResponse::from)
-                .toList();
-    }
-
     @Transactional
     public void updateStatus(UUID orderId, OrderStatus status, String reason, BigDecimal amount) {
         orderRepository.findById(orderId).ifPresent(order -> {
@@ -89,6 +81,17 @@ public class OrderService {
             orders = orderRepository.findByUserEmail(email);
         }
 
+        return orders.stream().map(OrderResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getAllOrders(OrderStatus status) {
+        List<Order> orders;
+        if (status != null) {
+            orders = orderRepository.findByStatus(status);
+        } else {
+            orders = orderRepository.findAll();
+        }
         return orders.stream().map(OrderResponse::from).toList();
     }
 
