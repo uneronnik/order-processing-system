@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 import java.util.Map;
 
 @Service
-@ConditionalOnProperty(name = "telegram.bot-token", havingValue = "", matchIfMissing = false)
+@ConditionalOnProperty(name = "telegram.bot-token")
 public class TelegramSender implements NotificationSender {
 
     private final RestClient restClient = RestClient.create();
@@ -24,5 +24,5 @@ public class TelegramSender implements NotificationSender {
                 .toBodilessEntity();
     }
 
-    public String getType() { return "log"; }
+    public String getType() { return "telegram"; }
 }
