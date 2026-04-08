@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-user-email-to-orders
+      author: fomenko
+      changes:
+        - addColumn:
+            tableName: orders
+            columns:
+              - column:
+                  name: user_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: true

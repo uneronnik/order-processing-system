@@ -33,9 +33,13 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "user_email")
+    private String userEmail;
 
     public Order() {}
 
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
     public UUID getId() { return id; }
     public String getProductId() { return productId; }
     public Integer getQuantity() { return quantity; }

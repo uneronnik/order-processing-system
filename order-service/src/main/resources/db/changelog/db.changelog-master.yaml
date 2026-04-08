@@ -3,3 +3,5 @@
       file: db/changelog/001-create-orders-table.yaml
   - include:
       file: db/changelog/002-make-amount-nullable.yaml
+  - include:
+      file: db/changelog/003-add-user-email-to-orders.yaml

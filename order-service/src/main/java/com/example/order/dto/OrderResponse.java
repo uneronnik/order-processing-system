@@ -13,6 +13,7 @@ public record OrderResponse(
         Integer quantity,
         BigDecimal amount,
         OrderStatus status,
+        String userEmail,
         LocalDateTime createdAt
 ) {
     public static OrderResponse from(Order order) {
@@ -22,6 +23,7 @@ public record OrderResponse(
                 order.getQuantity(),
                 order.getAmount(),
                 order.getStatus(),
+                order.getUserEmail(),
                 order.getCreatedAt()
         );
     }

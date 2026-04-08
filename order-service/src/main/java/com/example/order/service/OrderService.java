@@ -8,6 +8,7 @@ import com.example.order.entity.OrderStatus;
 import com.example.order.exception.OrderNotFoundException;
 import com.example.order.producer.OrderKafkaProducer;
 import com.example.order.repository.OrderRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,13 @@ public class OrderService {
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
         Order order = new Order();
         order.setProductId(request.productId());
         order.setQuantity(request.quantity());
         order.setStatus(OrderStatus.PENDING);
+        order.setUserEmail(email);
 
         Order saved = orderRepository.save(order);
 
@@ -47,8 +51,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponse getOrder(UUID id) {
-        Order order = orderRepository.findById(id)
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Order order = orderRepository.findByIdAndUserEmail(id, email)
                 .orElseThrow(() -> new OrderNotFoundException(id));
+
         return OrderResponse.from(order);
     }
 
@@ -70,4 +77,19 @@ public class OrderService {
             orderRepository.save(order);
         });
     }
+
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getMyOrders(OrderStatus status) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        List<Order> orders;
+        if (status != null) {
+            orders = orderRepository.findByUserEmailAndStatus(email, status);
+        } else {
+            orders = orderRepository.findByUserEmail(email);
+        }
+
+        return orders.stream().map(OrderResponse::from).toList();
+    }
+
 }

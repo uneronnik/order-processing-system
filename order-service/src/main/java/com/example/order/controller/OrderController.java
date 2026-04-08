@@ -34,13 +34,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getByStatus(
+    public ResponseEntity<List<OrderResponse>> getMyOrders(
             @RequestParam(required = false) OrderStatus status) {
-        if (status != null) {
-            return ResponseEntity.ok(orderService.getOrdersByStatus(status));
-        }
-        return ResponseEntity.ok(
-                orderService.getOrdersByStatus(OrderStatus.PENDING)
-        );
+        return ResponseEntity.ok(orderService.getMyOrders(status));
     }
 }
