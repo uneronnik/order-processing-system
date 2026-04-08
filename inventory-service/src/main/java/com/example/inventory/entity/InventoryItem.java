@@ -32,7 +32,12 @@ public class InventoryItem {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @PostUpdate
+    @PrePersist
+    protected void onCreate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
