@@ -1,12 +1,11 @@
 package com.example.payment;
 
-import com.example.common.event.OrderCreatedEvent;
+import com.example.common.event.InventoryReservedEvent;
 import com.example.payment.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
@@ -43,17 +42,19 @@ class PaymentIntegrationTest {
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
     }
 
+    @Autowired
+    private PaymentRepository paymentRepository;
 
-    @Autowired private PaymentRepository paymentRepository;
-    @Autowired private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Test
-    void whenOrderCreatedEventSent_thenPaymentCreated() throws Exception {
+    void whenInventoryReservedEventSent_thenPaymentCreated() throws Exception {
         UUID orderId = UUID.randomUUID();
-        OrderCreatedEvent event = new OrderCreatedEvent(
+        InventoryReservedEvent event = new InventoryReservedEvent(
                 orderId, "LAPTOP-001", 1, new BigDecimal("79990"), LocalDateTime.now());
 
-        kafkaTemplate.send("order-events", orderId.toString(), event).get();
+        kafkaTemplate.send("inventory-events", orderId.toString(), event).get();
 
         await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
             assertTrue(paymentRepository.existsByOrderId(orderId));
