@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: app
+    password: secret
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+jwt:
+  secret: your-very-long-secret-key-at-least-32-characters-long
+  expiration-ms: 86400000
+
+server:
+  port: 8085
