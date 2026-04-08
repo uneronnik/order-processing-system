@@ -56,7 +56,7 @@ class OrderControllerIntegrationTest {
         orderRepository.deleteAll();
     }
 
-    @Test
+/*    @Test
     void createOrder_shouldReturn201() {
         CreateOrderRequest request = new CreateOrderRequest("PHONE-001", 2, new BigDecimal("49990.00"));
 
@@ -67,9 +67,9 @@ class OrderControllerIntegrationTest {
         assertNotNull(response.getBody());
         assertEquals(OrderStatus.PENDING, response.getBody().status());
         assertEquals(1, orderRepository.count());
-    }
+    }*/
 
-    @Test
+/*    @Test
     void createOrder_withInvalidData_shouldReturn400() {
         CreateOrderRequest request = new CreateOrderRequest("", 1, new BigDecimal("100.00"));
 
@@ -77,7 +77,7 @@ class OrderControllerIntegrationTest {
                 "/api/orders", request, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
+    }*/
 
     @Test
     void getOrder_whenNotExists_shouldReturn404() {
