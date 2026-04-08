@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-insert-admin-user
+      author: fomenko
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@admin.com
+              - column:
+                  name: password
+                  value: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+              - column:
+                  name: role
+                  value: ADMIN
