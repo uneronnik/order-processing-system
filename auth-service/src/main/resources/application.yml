@@ -1,4 +1,7 @@
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: auth-service
   datasource:
@@ -9,8 +12,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
+
 
 jwt:
   secret: your-very-long-secret-key-at-least-32-characters-long

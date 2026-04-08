@@ -7,11 +7,14 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
                   name: email
-                  value: admin@admin.com
+                  value: "admin@admin.com"
               - column:
                   name: password
-                  value: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+                  value: "$2a$10$yYXyeSuJmirHrc7dwix/me57kndowfLf6t2gAGoA1B0jrWAYgYLzO"
               - column:
                   name: role
-                  value: ADMIN
+                  value: "ADMIN"
